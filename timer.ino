@@ -1,4 +1,4 @@
-#include <Wire.h> 
+#include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
@@ -11,17 +11,17 @@ bool pressed(bool direction) {
   static bool lastState = false;
   static bool held = false;
   bool reading = digitalRead(BUTTON2_PIN) == HIGH && digitalRead(BUTTON1_PIN) == HIGH;
-  
+
   bool ret = false;
-  
+
   if (millis() - debounceTime > 50) {
-    if(reading == direction) {
+    if (reading == direction) {
       ret = held ^ direction;
     }
     held = reading;
   }
 
-  if(lastState != reading) {
+  if (lastState != reading) {
     debounceTime = millis();
   }
   lastState = reading;
@@ -45,18 +45,18 @@ void loop() {
   static float time;
   static bool running = false;
   static int count = 1;
-  if(running) {
+  if (running) {
     time = (millis() - lastTime) / 1000.;
     // End timer
-    if(pressed(true)) {
+    if (pressed(true)) {
       running = false;
       count = 2;
     }
   } else {
-    if(pressed(false)) {
+    if (pressed(false)) {
       // Start timer
       count--;
-      if(count == 0) {
+      if (count == 0) {
         lastTime = millis();
         running = true;
         count = 2;
@@ -65,6 +65,6 @@ void loop() {
   }
   char buffer[100];
   dtostrf(time, 8, 3, buffer);
-  lcd.setCursor(0,0);
+  lcd.setCursor(0, 0);
   lcd.print(buffer);
 }
